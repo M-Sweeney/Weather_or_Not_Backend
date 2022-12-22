@@ -1,0 +1,3 @@
+CREATE DATABASE weather;
+CREATE USER weatheruser WITH PASSWORD 'weather';
+GRANT ALL PRIVILEGES ON DATABASE weather TO weatheruser;
