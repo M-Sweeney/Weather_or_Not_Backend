@@ -2,29 +2,13 @@ from rest_framework import serializers
 from .models import User, Category, Item, Activity
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    category = serializers.HyperlinkedRelatedField(
-      view_name = 'category_detail',
-      many = True,
-      read_only = True
-    )
-    item = serializers.HyperlinkedRelatedField(
-      view_name = 'item_detail',
-      many = True,
-      read_only = True
-    )
-    activity = serializers.HyperlinkedRelatedField(
-      view_name = 'activity_detail',
-      many = True,
-      read_only = True
-    )
-    class Meta:
-        model = User
-        fields = ('id', 'name', 'email', 'city', 'item', 'category', 'activity')
-
-
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.HyperlinkedRelatedField(
+      view_name = 'user_detail',
+      many = True,
+      read_only = True,
+      source='users'
+    )
 
     class Meta: 
         model = Category
@@ -32,9 +16,19 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer( read_only=True)
+    user = serializers.HyperlinkedRelatedField(
+      view_name = 'user_detail',
+      many = True,
+      read_only = True,
+      source='users'
+    )
 
-    category = CategorySerializer(read_only=True)
+    category = serializers.HyperlinkedRelatedField(
+      view_name = 'category_detail',
+      many = True,
+      read_only = True,
+      source='categories'
+    )
 
     class Meta:
         model = Item
@@ -42,10 +36,34 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.HyperlinkedRelatedField(
+      view_name = 'user_detail',
+      many = True,
+      read_only = True,
+      source='users'
+    )
 
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'free', 'indoors', 'user')
 
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    category = CategorySerializer(
+      many = True,
+      read_only = True,
+      source='categories'
+    )
+    item = ItemSerializer(
+      many = True,
+      read_only = True,
+      source='items' 
+    )
+    activity = ActivitySerializer(
+      many = True,
+      read_only = True,
+      source='activities'
+    )
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'email', 'city', 'item', 'category', 'activity')
