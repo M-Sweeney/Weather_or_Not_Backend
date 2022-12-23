@@ -46,6 +46,6 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'name', 'description', 'free', 'indoors', 'users')
+        fields = ('id', 'name', 'description', 'free', 'indoors', 'user')
 
 
