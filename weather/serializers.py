@@ -2,17 +2,7 @@ from rest_framework import serializers
 from .models import User, Category, Item, Activity
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(
-      view_name = 'user_detail',
-      many = True,
-      read_only = True,
-      source='users'
-    )
 
-    class Meta: 
-        model = Category
-        fields=('id', 'name', 'user')
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -34,6 +24,23 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         fields = ('id', 'name', 'description', 'photo', 'hot', 'warm', 'cool', 'cold', 'rain', 'snow', 'wind', 'category', 'user')
 
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(
+      view_name = 'user_detail',
+      many = True,
+      read_only = True,
+      source='users'
+    )
+
+    item = ItemSerializer(
+      many = True,
+      read_only = True,
+      source='items' 
+    )
+
+    class Meta: 
+        model = Category
+        fields=('id', 'name', 'user', 'item')
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(
