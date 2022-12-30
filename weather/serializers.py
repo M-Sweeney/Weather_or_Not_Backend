@@ -3,8 +3,6 @@ from .models import User, Category, Item, Activity
 
 
 
-
-
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(
       view_name = 'user_detail',
@@ -37,6 +35,7 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
       read_only = True,
       source='items' 
     )
+
 
     class Meta: 
         model = Category

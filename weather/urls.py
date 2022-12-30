@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from rest_framework.routers import DefaultRouter
 
+
 urlpatterns = [
     path('user/', views.UserList.as_view(), name='user_list'),
     path('user/<int:pk>', views.UserDetail.as_view(), name='user_detail'),
@@ -14,4 +15,7 @@ urlpatterns = [
 
     path('item/', views.ItemList.as_view(), name='item_list'),
     path('item/<int:pk>', views.ItemDetail.as_view(), name='item_detail'),
+    path('itempost/', views.ItemPost.as_view(), name='item_detail'),
+    path('itemupdate/<int:pk>', views.ItemUpdate.as_view(), name='item_update'),
+    path('itemdelete/<int:pk>', views.ItemDelete.as_view(), name='item_delete'),
 ]

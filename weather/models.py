@@ -15,6 +15,7 @@ class Category(models.Model):
     def __str__(self):
       return self.name
 
+
 class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activites')
     name = models.CharField(max_length=200)
@@ -26,18 +27,18 @@ class Activity(models.Model):
       return self.name
 
 class Item(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-    photo = models.CharField(max_length=500)
-    hot = models.BooleanField()
-    warm = models.BooleanField()
-    cool = models.BooleanField()
-    cold = models.BooleanField()
-    rain = models.BooleanField()
-    snow = models.BooleanField()
-    wind = models.BooleanField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items', null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items', null=True)
+    name = models.CharField(max_length=200, default="no name", null=True)
+    description = models.TextField(default="no description", null=True)
+    photo = models.CharField(max_length=500, default="no photo", null=True)
+    hot = models.BooleanField(default=False, null=True)
+    warm = models.BooleanField(default=False, null=True)
+    cool = models.BooleanField(default=False, null=True)
+    cold = models.BooleanField(default=False, null=True)
+    rain = models.BooleanField(default=False, null=True)
+    snow = models.BooleanField(default=False, null=True)
+    wind = models.BooleanField(default=False, null=True)
 
     def __str__(self):
       return self.name

@@ -1,5 +1,6 @@
 from rest_framework import generics
 from django.shortcuts import render
+from rest_framework.response import Response
 from .serializers import UserSerializer, ItemSerializer, CategorySerializer, ActivitySerializer
 from .models import User, Category, Item, Activity
 
@@ -28,6 +29,44 @@ class ActivityList(generics.ListCreateAPIView):
 class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
+
+
+class ItemPost(generics.RetrieveUpdateDestroyAPIView):
+    def get(self, request):
+        itemObj=Item.objects.all()
+        itemSerializeObj=ItemSerializer(itemObj,many=True)
+        return Response(itemSerializeObj.data)
+    
+    def post(self,request):
+        serializeobj=ItemSerializer(data=request.data)
+        if serializeobj.is_valid():
+            serializeobj.save()
+            return Response(200)
+        return Response(serializeobj.errors)
+
+class ItemUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    def post(self,request,pk):
+        try:
+            itemObj=self.get_object()
+        except:
+            return Response("Not found in database")
+
+        serializeobj=ItemSerializer(itemObj,data=request.data)
+        if serializeobj.is_valid():
+            serializeobj.save()
+            return Response(200)
+        return Response(serializeobj.errors)
+
+class ItemDelete(generics.RetrieveUpdateDestroyAPIView):
+    def post(self,request,pk):
+        try:
+            itemObj=Item.objects.get(pk=pk)
+        except:
+            return Response("Not found in database")
+        itemObj.delete()
+        return Response(200)
 
 
 class ItemList(generics.ListAPIView):
