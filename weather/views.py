@@ -7,6 +7,8 @@ from .models import User, Category, Item, Activity
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = []
+    permission_classes = []
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -32,6 +34,9 @@ class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ItemPost(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+
     def get(self, request):
         itemObj=Item.objects.all()
         itemSerializeObj=ItemSerializer(itemObj,many=True)
